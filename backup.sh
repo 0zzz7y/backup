@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
-# Fedora Workstation Backup Script
+# Backup script
 #
 # Backed up items:
 #   - Flatpak apps list

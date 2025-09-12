@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
-# Fedora Workstation Restore Script
+# Restore script
 #
 # Items restored:
 #   - Flatpak apps list
