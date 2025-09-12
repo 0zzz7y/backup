@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
-# Restore script
+# Restore Script
 #
 # Items restored:
 #   - Flatpak apps list
@@ -12,7 +12,6 @@ set -euo pipefail
 #   - ~/.gitconfig
 #   - ~/.themes
 #   - ~/.icons
-#   - ~/.local/share/fonts
 #   - ~/.ssh
 #   - ~/.gnupg
 #   - GNOME/KDE settings via dconf (dconf-settings.ini)
@@ -21,7 +20,7 @@ set -euo pipefail
 #   ./restore.sh                            # Interactive restore from latest backup
 #   ./restore.sh --all                      # Restore everything without prompts
 #   ./restore.sh --decrypt file.tar.gz.gpg  # Decrypt archive and restore from it
-#   ./restore.sh --dir /path                # Restore from custom base backup directory (default: $HOME/Backup)
+#   ./restore.sh --dir /path                # Restore from custom backup directory (default: $HOME/Backup)
 #   ./restore.sh --from /path/to/backup     # Restore from a specific backup directory
 #   ./restore.sh --dry-run                  # Preview restore actions without making changes
 # ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
@@ -43,7 +42,7 @@ Usage: $0 [--all] [--decrypt file.gpg] [--dir backup_directory] [--from /path] [
 
   --all             Restore everything without prompts
   --decrypt file    Decrypt archive and restore from it
-  --dir /path       Restore from custom base backup directory (default: $HOME/Backup)
+  --dir /path       Restore from custom backup directory (default: $HOME/Backup)
   --from /path      Restore from a specific backup directory
   --dry-run         Preview restore actions without making changes
 EOF
@@ -129,21 +128,20 @@ restore_dconf() {
     fi
 }
 
-## Main restore routine: decrypts archive and runs all restore preserving relative paths.
+## Main restore routine: decrypts archive and restores all preserving relative paths.
 run() {
     echo "[*] Restoring from backup directory: $BACKUP_DIRECTORY"
     get_backup_directory
     check_dry_run
     restore_flatpaks
-    restore_directory   "Flatpak app data"  ".var/app"
-    restore_directory   "Configs"           ".config"
-    restore_directory   "Local share"       ".local/share"
-    restore_file        "Git config"        ".gitconfig"
-    restore_directory   "Themes"            ".themes"
-    restore_directory   "Icons"             ".icons"
-    restore_directory   "Fonts"             ".local/share/fonts"
-    restore_directory   "SSH keys"          ".ssh"
-    restore_directory   "GPG keys"          ".gnupg"
+    restore_directory "Flatpak app data"    ".var/app"
+    restore_directory "Configs"             ".config"
+    restore_directory "Local share"         ".local/share"
+    restore_file      "Git config"          ".gitconfig"
+    restore_directory "Themes"              ".themes"
+    restore_directory "Icons"               ".icons"
+    restore_directory "SSH keys"            ".ssh"
+    restore_directory "GPG keys"            ".gnupg"
     restore_dconf
     echo "[*] Restore complete!"
     $DRY_RUN && echo "[*] (dry-run: nothing actually changed)"

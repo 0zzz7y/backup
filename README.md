@@ -1,10 +1,10 @@
 # Backup
 
-A pair of lightweight Bash scripts for backing up and restoring your workstation setup.
+A set of lightweight Bash scripts for backing up and restoring workstation setup as well as installing essential software.
 
 ---
 
-## ✦ Backup Script (`backup.sh`)
+## ✦ Backup Script
 
 Backed up items:
 - Flatpak apps list (`flatpaks.txt`)
@@ -14,7 +14,6 @@ Backed up items:
 - `~/.gitconfig`
 - `~/.themes`
 - `~/.icons`
-- `~/.local/share/fonts`
 - `~/.ssh`
 - `~/.gnupg`
 - GNOME/KDE settings via dconf (`dconf-settings.ini`)
@@ -24,16 +23,15 @@ Backed up items:
 ### Usage
 
 ```bash
-./backup.sh                             # Interactive backup
-./backup.sh --all                       # Backup everything without prompts
-./backup.sh --encrypt                   # Backup and encrypt with GPG symmetric encryption
-./backup.sh --dir /path                 # Backup to specified directory (default: $HOME/Backup)
-./backup.sh --dir /path --all --encrypt # Backup everything, custom dir, encrypted
-````
+./backup.sh             # Interactive backup
+./backup.sh --all       # Backup everything without prompts
+./backup.sh --encrypt   # Backup and encrypt with GPG symmetric encryption
+./backup.sh --dir /path # Backup to custom directory (default: $HOME/Backup)
+```
 
 ---
 
-## ✦ Restore Script (`restore.sh`)
+## ✦ Restore Script
 
 Restored items:
 
@@ -44,7 +42,6 @@ Restored items:
 * `~/.gitconfig`
 * `~/.themes`
 * `~/.icons`
-* `~/.local/share/fonts`
 * `~/.ssh`
 * `~/.gnupg`
 * GNOME/KDE settings via dconf (`dconf-settings.ini`)
@@ -64,24 +61,43 @@ Restored items:
 
 ---
 
-## ✦ Notes
+## ✦ Install Script
 
-* **Encryption** uses `gpg -c` (symmetric mode).
-  You'll be asked for a passphrase when encrypting and decrypting.
-* **Flatpak apps** are restored from Flathub (`flatpak install -y flathub`).
-* **Relative paths preserved**: backup layout mirrors `$HOME`.
-* **Dry-run mode** lets you preview restore actions safely before applying changes.
+Installs predefined packages via `dnf`, grouped by categories.
+
+**Categories:**
+
+* Development
+* Editors
+* Utilities
+* Security
+* Desktop
+* Fonts
+* Networking
+
+---
+
+### Usage
+
+```bash
+./install.sh            # Interactive install
+./install.sh --all      # Install all without prompts
+./install.sh --dry-run  # Preview actions without making changes
+```
 
 ---
 
 ## ✦ Example Workflow
 
 ```bash
-# Backup everything and encrypt
+# Backup and encrypt everything 
 ./backup.sh --all --encrypt
 
 # Restore everything from encrypted archive
 ./restore.sh --decrypt ~/Backup/20250912_153000.tar.gz.gpg --all
+
+# Install essential software
+./install.sh --all
 ```
 
 ---
@@ -96,4 +112,3 @@ Restored items:
 ---
 
 > Designed for Fedora Workstation, but adaptable to any Linux distro with Flatpak support.
-

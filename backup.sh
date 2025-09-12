@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
-# Backup script
+# Backup Script
 #
 # Backed up items:
 #   - Flatpak apps list
@@ -12,7 +12,6 @@ set -euo pipefail
 #   - ~/.gitconfig
 #   - ~/.themes
 #   - ~/.icons
-#   - ~/.local/share/fonts
 #   - ~/.ssh
 #   - ~/.gnupg
 #   - GNOME/KDE settings via dconf (dconf-settings.ini)
@@ -21,7 +20,7 @@ set -euo pipefail
 #   ./backup.sh                             # Interactive backup
 #   ./backup.sh --all                       # Backup everything without prompts
 #   ./backup.sh --encrypt                   # Backup and encrypt with GPG symmetric encryption
-#   ./backup.sh --dir /path                 # Backup to specified directory (default: $HOME/Backup)
+#   ./backup.sh --dir /path                 # Backup to custom directory (default: $HOME/Backup)
 #   ./backup.sh --dir /path --all --encrypt # Backup everything without prompts with specified directory and encrypt the archive
 # ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
@@ -40,7 +39,7 @@ Usage: $0 [--all] [--encrypt] [--dir backup_directory]
 
   --all         Backup everything without prompts
   --encrypt     Backup and encrypt with GPG symmetric encryption
-  --dir /path   Backup to specified directory (default: $HOME/Backup)
+  --dir /path   Backup to custom directory (default: $HOME/Backup)
 EOF
     exit 1
 }
@@ -126,7 +125,6 @@ run() {
     backup_file      "Git config"       "$HOME/.gitconfig"
     backup_directory "Themes"           "$HOME/.themes"
     backup_directory "Icons"            "$HOME/.icons"
-    backup_directory "Fonts"            "$HOME/.local/share/fonts"
     backup_directory "SSH keys"         "$HOME/.ssh"
     backup_directory "GPG keys"         "$HOME/.gnupg"
     backup_dconf

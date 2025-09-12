@@ -2,30 +2,30 @@
 set -euo pipefail
 
 # ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
-# Install script
+# Install Script
 #
 # Installs predefined packages via dnf, grouped by categories.
 #
 # Categories:
-#   - Development essentials
+#   - Development
 #   - Editors
-#   - System & shell utilities
-#   - Security & encryption
-#   - Desktop & daily use
+#   - Utilities
+#   - Security
+#   - Desktop
 #   - Fonts
 #   - Networking
 #
 # Usage:
-#   ./install.sh           # Interactive install of all categories
-#   ./install.sh --all     # Install all without prompts
-#   ./install.sh --dry-run # Preview actions without executing
+#   ./install.sh            # Interactive install
+#   ./install.sh --all      # Install all without prompts
+#   ./install.sh --dry-run  # Preview actions without making changes
 # ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 ALL=false
 DRY_RUN=false
 
 PACKAGES=(
-  # ───────────────────────── Development essentials ─────────────────────────
+  # ───────────────────────── Development ─────────────────────────
   git gcc gcc-c++ make cmake pkg-config
   python3 python3-pip
   java-17-openjdk-devel maven
@@ -36,13 +36,13 @@ PACKAGES=(
   # ───────────────────────── Editors ─────────────────────────
   vim neovim
 
-  # ───────────────────────── System & shell utilities ─────────────────────────
+  # ───────────────────────── Utilities ─────────────────────────
   tree tmux htop fzf ripgrep fd-find curl wget unzip tar
 
-  # ───────────────────────── Security & encryption ─────────────────────────
+  # ───────────────────────── Security ─────────────────────────
   gnupg2 openssl keychain
 
-  # ───────────────────────── Desktop & daily use ─────────────────────────
+  # ───────────────────────── Desktop ─────────────────────────
   gnome-tweaks gnome-extensions-app ffmpeg ImageMagick
 
   # ───────────────────────── Fonts ─────────────────────────
@@ -59,8 +59,8 @@ usage() {
     cat <<EOF
 Usage: $0 [--all] [--dry-run]
 
-  --all       Install all packages without prompts
-  --dry-run   Show what would be done without executing commands
+  --all       Install all without prompts
+  --dry-run   Preview actions without making changes
 EOF
     exit 1
 }
@@ -74,7 +74,7 @@ run_cmd() {
     fi
 }
 
-## Prompts the user for yes/no confirmation unless --all is set.
+## Asks the user whether to install a given category unless --all option is set.
 ask() {
     local PROMPT=$1
     if $ALL; then
@@ -105,13 +105,13 @@ update_system() {
 
 ## Main routine: installs all categories and updates the system.
 run() {
-    install_packages "Development essentials" git gcc gcc-c++ make cmake pkg-config python3 python3-pip java-17-openjdk-devel maven nodejs npm podman podman-compose sqlite
-    install_packages "Editors" vim neovim
-    install_packages "System & shell utilities" tree tmux htop fzf ripgrep fd-find curl wget unzip tar
-    install_packages "Security & encryption" gnupg2 openssl keychain
-    install_packages "Desktop & daily use" gnome-tweaks gnome-extensions-app ffmpeg ImageMagick
-    install_packages "Fonts" fonts-firacode fonts-jetbrains-mono
-    install_packages "Networking" openssh-clients traceroute nmap
+    install_packages "Development"  git gcc gcc-c++ make cmake pkg-config python3 python3-pip java-17-openjdk-devel maven nodejs npm podman podman-compose sqlite
+    install_packages "Editors"      vim neovim
+    install_packages "Utilities"    tree tmux htop fzf ripgrep fd-find curl wget unzip tar
+    install_packages "Security"     gnupg2 openssl keychain
+    install_packages "Desktop"      gnome-tweaks gnome-extensions-app ffmpeg ImageMagick
+    install_packages "Fonts"        fonts-firacode fonts-jetbrains-mono
+    install_packages "Networking"   openssh-clients traceroute nmap
     update_system
     echo "[*] Installation complete."
 }
