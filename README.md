@@ -94,7 +94,7 @@ Installs predefined packages via `dnf`, grouped by categories.
 ./backup.sh --all --encrypt
 
 # Restore everything from encrypted archive
-./restore.sh --decrypt ~/Backup/20250912_153000.tar.gz.gpg --all
+./restore.sh --decrypt ~/Backup/YYYYMMDD_HHmmSS.tar.gz.gpg --all
 
 # Install essential software
 ./install.sh --all
