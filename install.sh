@@ -26,7 +26,10 @@ DRY_RUN=false
 
 PACKAGES=(
   # ───────────────────────── Development ─────────────────────────
-  git gcc gcc-c++ make cmake pkg-config
+  git
+  gcc gcc-c++
+  make cmake
+  pkg-config
   python3 python3-pip
   java-17-openjdk-devel maven
   nodejs npm
@@ -37,7 +40,7 @@ PACKAGES=(
   vim neovim
 
   # ───────────────────────── Utilities ─────────────────────────
-  tree tmux htop fzf ripgrep fd-find curl wget unzip tar
+  htop tmux ripgrep fzf tree fd-find curl wget p7zip tar unzip
 
   # ───────────────────────── Security ─────────────────────────
   gnupg2 openssl keychain
