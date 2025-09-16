@@ -1,6 +1,6 @@
 # Backup
 
-A set of lightweight Bash scripts for backing up and restoring workstation setup as well as installing essential software.
+A set of lightweight Bash scripts for backing up and restoring workstation configurations and installing essential software.
 
 ---
 

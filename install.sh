@@ -38,7 +38,7 @@ PACKAGES=(
   vim neovim
 
   # ───────────────────────── Utilities ─────────────────────────
-  tree tmux htop fzf ripgrep fd-find curl wget unzip tar bleachbit
+  htop tmux ripgrep fzf tree fd-find curl wget p7zip tar unzip bleachbit
 
   # ───────────────────────── Security ─────────────────────────
   gnupg2 openssl keychain
