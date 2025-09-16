@@ -4,8 +4,6 @@ set -euo pipefail
 # ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 # Install Script
 #
-# Installs predefined packages via dnf, grouped by categories.
-#
 # Categories:
 #   - Development
 #   - Editors
@@ -26,7 +24,10 @@ DRY_RUN=false
 
 PACKAGES=(
   # ───────────────────────── Development ─────────────────────────
-  git gcc gcc-c++ make cmake pkg-config
+  git
+  cargo
+  gcc gcc-c++
+  make cmake pkg-config
   python3 python3-pip
   java-17-openjdk-devel maven
   nodejs npm
@@ -37,7 +38,7 @@ PACKAGES=(
   vim neovim
 
   # ───────────────────────── Utilities ─────────────────────────
-  tree tmux htop fzf ripgrep fd-find curl wget unzip tar
+  tree tmux htop fzf ripgrep fd-find curl wget unzip tar bleachbit
 
   # ───────────────────────── Security ─────────────────────────
   gnupg2 openssl keychain
@@ -54,7 +55,7 @@ PACKAGES=(
 
 # ――――――――――――――――――――――――― Functions ―――――――――――――――――――――――――
 
-## Prints usage help and exits.
+# Prints usage help and exits.
 usage() {
     cat <<EOF
 Usage: $0 [--all] [--dry-run]
@@ -65,7 +66,7 @@ EOF
     exit 1
 }
 
-## Runs a command, optionally in dry-run mode.
+# Runs a command or prints it if dry-run mode.
 run_cmd() {
     if $DRY_RUN; then
         echo "[dry-run] $*"
@@ -74,7 +75,7 @@ run_cmd() {
     fi
 }
 
-## Asks the user whether to install a given category unless --all option is set.
+# Asks the user whether to install a given category unless --all option is set.
 ask() {
     local PROMPT=$1
     if $ALL; then
@@ -84,7 +85,7 @@ ask() {
     [[ "$answer" =~ ^[Yy]$ ]]
 }
 
-## Installs a list of packages via dnf.
+# Installs a list of packages via dnf.
 install_packages() {
     local CATEGORY=$1
     shift
@@ -95,7 +96,7 @@ install_packages() {
     fi
 }
 
-## Updates all system packages.
+# Updates all system packages.
 update_system() {
     if ask "Run full system update?"; then
         echo "[*] Updating system packages..."
@@ -103,11 +104,11 @@ update_system() {
     fi
 }
 
-## Main routine: installs all categories and updates the system.
+# ――――――――――――――――――――――――― Main routine ―――――――――――――――――――――――――
 run() {
-    install_packages "Development"  git gcc gcc-c++ make cmake pkg-config python3 python3-pip java-17-openjdk-devel maven nodejs npm podman podman-compose sqlite
+    install_packages "Development"  git cargo gcc gcc-c++ make cmake pkg-config python3 python3-pip java-17-openjdk-devel maven nodejs npm podman podman-compose sqlite
     install_packages "Editors"      vim neovim
-    install_packages "Utilities"    tree tmux htop fzf ripgrep fd-find curl wget unzip tar
+    install_packages "Utilities"    tree tmux htop fzf ripgrep fd-find curl wget unzip tar bleachbit
     install_packages "Security"     gnupg2 openssl keychain
     install_packages "Desktop"      gnome-tweaks gnome-extensions-app ffmpeg ImageMagick
     install_packages "Fonts"        fonts-firacode fonts-jetbrains-mono

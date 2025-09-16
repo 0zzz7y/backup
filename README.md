@@ -87,6 +87,31 @@ Installs predefined packages via `dnf`, grouped by categories.
 
 ---
 
+## ✦ Cleanup Script
+
+Cleans up files via bleachbit and custom cleanup scripts, grouped by categories.
+
+**Categories:**
+
+* BleachBit
+* Package Manager
+* Kernels
+* Logs & Journals
+* Snapshots
+* Containers
+
+---
+
+### Usage
+
+```bash
+./cleanup.sh            # Interactive cleanup
+./install.sh --all      # Cleanup all without prompts
+./install.sh --dry-run  # Preview actions without making changes
+```
+
+---
+
 ## ✦ Example Workflow
 
 ```bash
@@ -94,10 +119,13 @@ Installs predefined packages via `dnf`, grouped by categories.
 ./backup.sh --all --encrypt
 
 # Restore everything from encrypted archive
-./restore.sh --decrypt ~/Backup/20250912_153000.tar.gz.gpg --all
+./restore.sh --decrypt ~/Backup/YYYYMMDD_HHmmSS.tar.gz.gpg --all
 
 # Install essential software
 ./install.sh --all
+
+# Cleans up unwanted files and software
+./cleanup.sh --all
 ```
 
 ---

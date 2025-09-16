@@ -32,7 +32,7 @@ BASE_BACKUP_DIRECTORY="$HOME/Backup"
 
 # ――――――――――――――――――――――――― Functions ―――――――――――――――――――――――――
 
-## Prints usage help and exits.
+# Prints usage help and exits.
 usage() {
     cat <<EOF
 Usage: $0 [--all] [--encrypt] [--dir backup_directory]
@@ -44,7 +44,7 @@ EOF
     exit 1
 }
 
-## Creates backup directory with timestamp as a name.
+# Creates backup directory with timestamp as a name.
 create_backup_directory() {
     TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
     BACKUP_DIRECTORY="$BASE_BACKUP_DIRECTORY/$TIMESTAMP"
@@ -52,7 +52,7 @@ create_backup_directory() {
     echo "[*] Backup directory: $BACKUP_DIRECTORY"
 }
 
-## Asks the user whether to back up a given item unless --all option is set.
+# Asks the user whether to back up a given item unless --all option is set.
 ask_backup() {
     local ITEM_NAME=$1
     if $ALL; then return 0; fi
@@ -60,7 +60,7 @@ ask_backup() {
     [[ "$answer" =~ ^[Yy]$ ]]
 }
 
-## Exports the list of Flatpak apps to flatpaks.txt.
+# Exports the list of Flatpak apps to flatpaks.txt.
 backup_flatpaks() {
     if command -v flatpak >/dev/null 2>&1; then
         if ask_backup "Flatpak apps"; then
@@ -70,7 +70,7 @@ backup_flatpaks() {
     fi
 }
 
-## Backs up a directory to the backup directory, preserving relative path.
+# Backs up a directory to the backup directory, preserving relative path.
 backup_directory() {
     local NAME=$1
     local PATH_TO_BACKUP=$2
@@ -82,7 +82,7 @@ backup_directory() {
     fi
 }
 
-## Backs up a single file to the backup directory, preserving relative path.
+# Backs up a single file to the backup directory, preserving relative path.
 backup_file() {
     local NAME=$1
     local FILE_TO_BACKUP=$2
@@ -94,7 +94,7 @@ backup_file() {
     fi
 }
 
-## Dumps dconf settings to dconf-settings.ini.
+# Dumps dconf settings to dconf-settings.ini.
 backup_dconf() {
     if command -v dconf >/dev/null 2>&1; then
         if ask_backup "GNOME/KDE settings (dconf)"; then
@@ -104,7 +104,7 @@ backup_dconf() {
     fi
 }
 
-## Encrypts the backup directory with gpg symmetric encryption.
+# Encrypts the backup directory with gpg symmetric encryption.
 encrypt_backup() {
     if $ENCRYPT; then
         echo "[*] Encrypting backup..."
@@ -115,7 +115,7 @@ encrypt_backup() {
     fi
 }
 
-## Main backup routine: creates backup directory, runs all backups and encrypts the directory.
+# ───────────────────────── Main Routine ─────────────────────────
 run() {
     create_backup_directory
     backup_flatpaks

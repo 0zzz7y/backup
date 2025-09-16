@@ -35,7 +35,7 @@ BASE_BACKUP_DIRECTORY="$HOME/Backup"
 
 # ――――――――――――――――――――――――― Functions ―――――――――――――――――――――――――
 
-## Prints usage help and exits.
+# Prints usage help and exits.
 usage() {
     cat <<EOF
 Usage: $0 [--all] [--decrypt file.gpg] [--dir backup_directory] [--from /path] [--dry-run]
@@ -49,7 +49,7 @@ EOF
     exit 1
 }
 
-## Gets the backup directory, if its encrypted then decrypts it.
+# Gets the backup directory, if its encrypted then decrypts it.
 get_backup_directory() {
     if [[ -n "$DECRYPT_FILE" ]]; then
         decrypt_backup "$DECRYPT_FILE"
@@ -60,7 +60,7 @@ get_backup_directory() {
     fi
 }
 
-## Checks for --dry-run flag, if it is set, no changes will be made.
+# Checks for --dry-run flag, if it is set, no changes will be made.
 check_dry_run() {
     if $DRY_RUN; then
         RSYNC_OPTS="--dry-run -aHAX --delete"
@@ -68,7 +68,7 @@ check_dry_run() {
     fi
 }
 
-## Asks the user whether to restore a given item unless --all option is set.
+# Asks the user whether to restore a given item unless --all option is set.
 ask_restore() {
     local ITEM_NAME=$1
     if $ALL; then return 0; fi
@@ -76,7 +76,7 @@ ask_restore() {
     [[ "$answer" =~ ^[Yy]$ ]]
 }
 
-## Decrypts the backup directory with gpg symmetric encryption.
+# Decrypts the backup directory with gpg symmetric encryption.
 decrypt_backup() {
     local FILE=$1
     local TEMP_DIRECTORY
@@ -87,7 +87,7 @@ decrypt_backup() {
     echo "[*] Using decrypted backup at $BACKUP_DIRECTORY"
 }
 
-## Restores the list of Flatpak apps from flatpaks.txt.
+# Restores the list of Flatpak apps from flatpaks.txt.
 restore_flatpaks() {
     if [ -f "$BACKUP_DIRECTORY/flatpaks.txt" ] && ask_restore "Flatpak apps"; then
         flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -95,7 +95,7 @@ restore_flatpaks() {
     fi
 }
 
-## Restores a directory from the backup directory, preserving relative path.
+# Restores a directory from the backup directory, preserving relative path.
 restore_directory() {
     local NAME=$1
     local REL_PATH=$2
@@ -108,7 +108,7 @@ restore_directory() {
     fi
 }
 
-## Restores a single file from the backup directory, preserving relative path.
+# Restores a single file from the backup directory, preserving relative path.
 restore_file() {
     local NAME=$1
     local REL_FILE=$2
@@ -121,14 +121,14 @@ restore_file() {
     fi
 }
 
-## Restores dconf settings from dconf-settings.ini.
+# Restores dconf settings from dconf-settings.ini.
 restore_dconf() {
     if [ -f "$BACKUP_DIRECTORY/dconf-settings.ini" ] && ask_restore "GNOME/KDE settings (dconf)"; then
         dconf load / < "$BACKUP_DIRECTORY/dconf-settings.ini"
     fi
 }
 
-## Main restore routine: decrypts archive and restores all preserving relative paths.
+# ――――――――――――――――――――――― Main routine ―――――――――――――――――――――――
 run() {
     echo "[*] Restoring from backup directory: $BACKUP_DIRECTORY"
     get_backup_directory
