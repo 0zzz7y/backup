@@ -130,13 +130,4 @@ Cleans up files via bleachbit and custom cleanup scripts, grouped by categories.
 
 ---
 
-## ✦ Why this instead of full backups?
-
-* Small, portable, and human-readable backups
-* Fast to reapply on a fresh system
-* Works well with cloud storage for personal files
-* Easy to audit what is actually saved and restored
-
----
-
-> Designed for Fedora Workstation, but adaptable to any Linux distro with Flatpak support.
+> Designed for Linux distro with Flatpak support.
