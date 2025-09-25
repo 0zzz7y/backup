@@ -5,12 +5,13 @@ set -euo pipefail
 # Cleanup Script
 #
 # Categories:
-#   - BleachBit
 #   - Package Manager
 #   - Kernels
-#   - Logs & Journals
 #   - Snapshots
+#   - Logs
+#   - Flatpak
 #   - Containers
+#   - BleachBit
 #
 # Usage:
 #   ./cleanup.sh            # Interactive cleanup
@@ -80,17 +81,6 @@ detect_pkg_manager() {
 
 PKG_MANAGER="$(detect_pkg_manager)"
 
-# ───────────────────────── BleachBit ─────────────────────────
-cleanup_bleachbit() {
-    if ask "Run BleachBit cleanup for user?"; then
-        run_cmd bleachbit --clean "${BLEACHBIT_CLEANERS[@]}"
-    fi
-    
-    if ask "Run BleachBit cleanup for system (sudo)?"; then
-        run_cmd sudo bleachbit --clean "${BLEACHBIT_CLEANERS[@]}"
-    fi
-}
-
 # ───────────────────────── Package Manager ─────────────────────────
 cleanup_pkg_manager() {
     case "$PKG_MANAGER" in
@@ -143,17 +133,6 @@ cleanup_kernels() {
     esac
 }
 
-# ───────────────────────── Logs & Journals ─────────────────────────
-cleanup_logs() {
-    if ask "Vacuum journalctl logs older than 7 days?"; then
-        run_cmd sudo journalctl --vacuum-time=7d
-    fi
-
-    if ask "Force logrotate?"; then
-        run_cmd sudo logrotate --force /etc/logrotate.conf || true
-    fi
-}
-
 # ───────────────────────── Snapshots ─────────────────────────
 cleanup_snapshots() {
     if command -v timeshift >/dev/null 2>&1; then
@@ -165,6 +144,26 @@ cleanup_snapshots() {
     if command -v snapper >/dev/null 2>&1; then
         if ask "List Snapper snapshots?"; then
             run_cmd sudo snapper list
+        fi
+    fi
+}
+
+# ───────────────────────── Logs ─────────────────────────
+cleanup_logs() {
+    if ask "Vacuum journalctl logs older than 7 days?"; then
+        run_cmd sudo journalctl --vacuum-time=7d
+    fi
+
+    if ask "Force logrotate?"; then
+        run_cmd sudo logrotate --force /etc/logrotate.conf || true
+    fi
+}
+
+# ───────────────────────── Flatpak ─────────────────────────
+cleanup_flatpak() {
+    if command -v flatpak >/dev/null 2>&1; then
+        if ask "Remove unused Flatpak runtimes?"; then
+            run_cmd flatpak uninstall --unused -y
         fi
     fi
 }
@@ -182,22 +181,28 @@ cleanup_containers() {
             run_cmd podman system prune -af
         fi
     fi
+}
 
-    if command -v flatpak >/dev/null 2>&1; then
-        if ask "Remove unused Flatpak runtimes?"; then
-            run_cmd flatpak uninstall --unused -y
-        fi
+# ───────────────────────── BleachBit ─────────────────────────
+cleanup_bleachbit() {
+    if ask "Run BleachBit cleanup for user?"; then
+        run_cmd bleachbit --clean "${BLEACHBIT_CLEANERS[@]}"
+    fi
+    
+    if ask "Run BleachBit cleanup for system (sudo)?"; then
+        run_cmd sudo bleachbit --clean "${BLEACHBIT_CLEANERS[@]}"
     fi
 }
 
 # ――――――――――――――――――――――― Main routine ―――――――――――――――――――――――
 run() {
-    cleanup_bleachbit
     cleanup_pkg_manager
     cleanup_kernels
-    cleanup_logs
     cleanup_snapshots
+    cleanup_logs
+    cleanup_flatpak
     cleanup_containers
+    cleanup_bleachbit
     echo "[*] Cleanup complete."
     if $DRY_RUN; then
         echo "[note] This was a dry-run. No destructive changes were performed."

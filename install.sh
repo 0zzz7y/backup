@@ -6,12 +6,12 @@ set -euo pipefail
 #
 # Categories:
 #   - Development
-#   - Editors
-#   - Utilities
+#   - Network
 #   - Security
+#   - Utility
 #   - Desktop
-#   - Fonts
-#   - Networking
+#   - Editor
+#   - Font
 #
 # Usage:
 #   ./install.sh            # Interactive install
@@ -22,35 +22,40 @@ set -euo pipefail
 ALL=false
 DRY_RUN=false
 
-PACKAGES=(
-  # ───────────────────────── Development ─────────────────────────
+DEVELOPMENT_PACKAGES=(
   git
   cargo
   gcc gcc-c++
   make cmake pkg-config
   python3 python3-pip
   java-17-openjdk-devel maven
-  nodejs npm
+  nodejs npm pnpm
   podman podman-compose
   sqlite
+)
 
-  # ───────────────────────── Editors ─────────────────────────
-  vim neovim
-
-  # ───────────────────────── Utilities ─────────────────────────
-  htop tmux ripgrep fzf tree fd-find curl wget p7zip tar unzip bleachbit
-
-  # ───────────────────────── Security ─────────────────────────
-  gnupg2 openssl keychain
-
-  # ───────────────────────── Desktop ─────────────────────────
-  gnome-tweaks gnome-extensions-app ffmpeg ImageMagick
-
-  # ───────────────────────── Fonts ─────────────────────────
-  fonts-firacode fonts-jetbrains-mono
-
-  # ───────────────────────── Networking ─────────────────────────
+NETWORK_PACKAGES=(
   openssh-clients traceroute nmap
+)
+
+SECURITY_PACKAGES=(
+  gnupg2 openssl keychain
+)
+
+UTILITY_PACKAGES=(
+  htop tmux ripgrep fzf tree fd-find curl wget p7zip tar unzip bleachbit
+)
+
+DESKTOP_PACKAGES=(
+  gnome-tweaks gnome-extensions-app ffmpeg ImageMagick
+)
+
+EDITOR_PACKAGES=(
+  vim neovim
+)
+
+FONT_PACKAGES=(
+  fonts-firacode fonts-jetbrains-mono
 )
 
 # ――――――――――――――――――――――――― Functions ―――――――――――――――――――――――――
@@ -106,13 +111,13 @@ update_system() {
 
 # ――――――――――――――――――――――――― Main routine ―――――――――――――――――――――――――
 run() {
-    install_packages "Development"  git cargo gcc gcc-c++ make cmake pkg-config python3 python3-pip java-17-openjdk-devel maven nodejs npm podman podman-compose sqlite
-    install_packages "Editors"      vim neovim
-    install_packages "Utilities"    tree tmux htop fzf ripgrep fd-find curl wget unzip tar bleachbit
-    install_packages "Security"     gnupg2 openssl keychain
-    install_packages "Desktop"      gnome-tweaks gnome-extensions-app ffmpeg ImageMagick
-    install_packages "Fonts"        fonts-firacode fonts-jetbrains-mono
-    install_packages "Networking"   openssh-clients traceroute nmap
+    install_packages "Development"  "${DEVELOPMENT_PACKAGES[@]}"
+    install_packages "Network"      "${NETWORK_PACKAGES[@]}"
+    install_packages "Security"     "${SECURITY_PACKAGES[@]}"
+    install_packages "Utility"      "${UTILITY_PACKAGES[@]}"
+    install_packages "Desktop"      "${DESKTOP_PACKAGES[@]}"
+    install_packages "Editor"       "${EDITOR_PACKAGES[@]}"
+    install_packages "Font"         "${FONT_PACKAGES[@]}"
     update_system
     echo "[*] Installation complete."
 }
